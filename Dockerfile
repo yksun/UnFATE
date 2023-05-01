@@ -8,7 +8,7 @@ RUN conda update -n base -c defaults --yes conda && \
 # Install unfate deps from bioconda
 # here specifying specific versions to be able to set ENV below
 RUN mamba create -c conda-forge -c bioconda -c defaults -c etetoolkit \
-    -n unfate --yes "python=3.7" biopython==1.76 pandas seaborn click \
+    -n unfate --yes "python>=3.6,<3.7" biopython==1.76 pandas seaborn click \
     blast spades exonerate hmmer trimal mafft \
     parallel \
     ete3 ete_toolchain ete3_external_apps \
@@ -18,7 +18,8 @@ RUN mamba create -c conda-forge -c bioconda -c defaults -c etetoolkit \
 SHELL ["conda", "run", "-n", "unfate", "/bin/bash", "-c"]
 RUN git clone https://github.com/claudioametrano/UnFATE.git
 RUN cd UnFATE
-python3 main_wrap.py --first_use
+RUN tar -xf TUTORIAL_DATASET.tar.xz
+RUN python3 main_wrap.py -b ./TUTORIAL_DATASET/12_Unfate_markers_aa.fasta -a ./TUTORIAL_DATASET/assemb_tutorial/ -w ./TUTORIAL_DATASET/WGS_tutorial/ -t ./TUTORIAL_DATASET/TE_tutorial/ -n Letharia -o ./output_wgs_te_ass_letharia -c 4 -f
 
 # package with conda-pack
 RUN conda-pack --ignore-missing-files -n unfate -o /tmp/env.tar && \
