@@ -23,6 +23,9 @@ RUN cd UnFATE
 # Install java via apt-get
 RUN apt-get update && apt-get install -y default-jre
 
+# GNU parallel cite permission
+RUN echo 'will cite' | parallel --citation || true
+
 # add it to the PATH and add env variables
 ENV PATH /opt/conda/envs/unfate/bin:$PATH
 ENV PATH /UnFATE:$PATH
